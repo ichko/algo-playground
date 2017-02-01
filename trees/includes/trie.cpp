@@ -25,6 +25,16 @@ public:
         }
     }
 
+    bool contains(T* values, unit size) {
+        Node<T>* parent = find(&root, values, size);
+        return parent != nullptr && parent->is_leaf() && parent->get_level() == size;
+    }
+
+    bool contains_prefix(T* values, unit size) {
+        Node<T>* parent = find(&root, values, size);
+        return parent != nullptr && parent->get_level() == size;
+    }
+
     friend ostream& operator<<(ostream& os, const Trie<T>& trie) {
         os << trie.root;
         return os;

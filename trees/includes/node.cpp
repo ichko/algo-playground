@@ -2,6 +2,8 @@
 
 #include <map>
 
+typedef int unit;
+
 using std::map;
 using std::ostream;
 
@@ -55,7 +57,7 @@ public:
         leaf = _leaf;
     }
 
-    bool get_leaf() const {
+    bool is_leaf() const {
         return leaf;
     }
 
