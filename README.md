@@ -1,5 +1,5 @@
 # Trees in C++
-## Implementing different tree structures
+Implementing different tree structures
 
 ## Content
  - Trie
