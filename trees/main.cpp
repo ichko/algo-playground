@@ -4,7 +4,7 @@ using namespace std;
 
 int main() {
 
-    Trie<char> trie;
+    Trees::Trie<char> trie;
 
     trie.insert("banana", 6);
     trie.insert("bbnana", 6);
