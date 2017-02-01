@@ -10,6 +10,8 @@ int main() {
     trie.insert("bbnana", 6);
     trie.insert("bananata", 8);
     trie.insert("bananama", 8);
+    trie.erase("banana", 6);
+    trie.erase("bananama", 8);
 
     cout << trie.contains("banana", 6) << endl;
     cout << trie.contains("banaza", 6) << endl;

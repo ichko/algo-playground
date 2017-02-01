@@ -15,12 +15,14 @@ namespace Trees {
     template <typename T> class Node {
 
         T value;
+        Node* parent;
         map<T, Node*> children;
         bool leaf;
         unit level;
 
     public:
-        Node(T _value = T(), bool _leaf = false) : value(_value), leaf(_leaf), level(0) {}
+        Node(T _value = T(), bool _leaf = false) : 
+            value(_value), parent(nullptr), leaf(_leaf), level(0) {}
 
         Node(const Node& node) { copy(node); }
 
@@ -50,9 +52,12 @@ namespace Trees {
             return nullptr;
         }
 
-        void erase(unit pos) {
-            delete children[pos];
-            children[pos] = nullptr;
+        void erase(T key) {
+            auto it = children.find(key);
+            if (it != children.end()) {
+                delete it->second;
+                children.erase(key);
+            }
         }
 
         void set_leaf(bool _leaf = true) {
@@ -69,6 +74,22 @@ namespace Trees {
 
         unit get_level() {
             return level;
+        }
+
+        size_t get_num_children() {
+            return children.size();
+        }
+
+        void set_parent(Node<T>* _parent) {
+            parent = _parent;
+        }
+
+        Node* get_parent() {
+            return parent;
+        }
+
+        T& get_value() {
+            return value;
         }
 
         friend ostream& operator<<(ostream& os, const Node<T>& node) {
