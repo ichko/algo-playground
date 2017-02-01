@@ -1,11 +1,16 @@
 #include <iostream>
-#include "trie.h"
+#include "trie.cpp"
 using namespace std;
 
 int main() {
-    cout << "Hello wolrd" << endl;
 
-    Trie<string> trie;
+    Trie<char> trie;
 
-    return 0;
+    trie.insert("banana", 6);
+    trie.insert("bbnana", 6);
+    trie.insert("bananata", 8);
+    trie.insert("bananama", 8);
+
+    cout << trie;
+
 }
