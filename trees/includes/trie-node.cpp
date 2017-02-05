@@ -12,38 +12,38 @@ namespace Trees {
     #define INDENT ' '
     #define LEAF_MARKER '*'
 
-    template <typename T> class Node {
+    template <typename T> class TrieNode {
 
         T value;
-        Node* parent;
-        map<T, Node*> children;
+        TrieNode* parent;
+        map<T, TrieNode*> children;
         bool leaf;
         unit level;
 
     public:
-        Node(T _value = T(), bool _leaf = false) : 
+        TrieNode(T _value = T(), bool _leaf = false) : 
             value(_value), parent(nullptr), leaf(_leaf), level(0) {}
 
-        Node(const Node& node) { copy(node); }
+        TrieNode(const TrieNode& node) { copy(node); }
 
-        Node& operator=(const Node& node) {
+        TrieNode& operator=(const TrieNode& node) {
             if (&node != this) erase();
             copy(node);
 
             return *this;
         }
 
-        ~Node() { erase(); }
+        ~TrieNode() { erase(); }
 
 
-        Node* insert(T& value) {
-            auto child = new Node(value);
+        TrieNode* insert(T& value) {
+            auto child = new TrieNode(value);
             children.insert({ value, child });
 
             return child;
         }
 
-        Node* get_child(T& key) const {
+        TrieNode* get_child(T& key) const {
             auto it = children.find(key);
             if (it != children.end()) {
                 return it->second;
@@ -80,11 +80,11 @@ namespace Trees {
             return children.size();
         }
 
-        void set_parent(Node<T>* _parent) {
+        void set_parent(TrieNode<T>* _parent) {
             parent = _parent;
         }
 
-        Node* get_parent() {
+        TrieNode* get_parent() {
             return parent;
         }
 
@@ -92,7 +92,7 @@ namespace Trees {
             return value;
         }
 
-        friend ostream& operator<<(ostream& os, const Node<T>& node) {
+        friend ostream& operator<<(ostream& os, const TrieNode<T>& node) {
             node.print(os);
             return os;
         }
@@ -110,11 +110,11 @@ namespace Trees {
             }
         }
 
-        void copy(const Node& node) {
+        void copy(const TrieNode& node) {
             value = node.value;
             leaf = node.leaf;
             for (auto& kv : children) {
-                children.insert(kv.first, new Node(kv.second));
+                children.insert(kv.first, new TrieNode(kv.second));
             }
         }
 

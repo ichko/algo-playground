@@ -1,9 +1,16 @@
 #include <iostream>
 #include "includes/trie.cpp"
+#include "includes/disjoint-set.cpp"
 using namespace std;
 
 int main() {
 
+
+
+}
+
+
+void trieTest() {
     Trees::Trie<char> trie;
 
     trie.insert("banana", 6);
@@ -18,5 +25,4 @@ int main() {
     cout << trie.contains_prefix("ban", 3) << endl;
 
     cout << trie;
-
 }

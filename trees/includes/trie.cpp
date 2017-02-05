@@ -9,7 +9,7 @@ namespace Trees {
 
     template <typename T> class Trie {
 
-        Node<T> root;
+        TrieNode<T> root;
 
     public:
         Trie() : root(ROOT_VALUE) {}
@@ -63,7 +63,7 @@ namespace Trees {
         }
 
     private:
-        Node<T>* find(Node<T>* parent, T* values, unit size) {
+        TrieNode<T>* find(TrieNode<T>* parent, T* values, unit size) {
             auto old_parent = parent;
             for (auto i = 0; i < size; i++) {
                 if (parent != nullptr) {
