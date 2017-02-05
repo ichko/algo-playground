@@ -18,6 +18,20 @@ namespace Tree {
         map<T, DisjointSetNode<T>* > nodesMap;
 
     public:
+        DisjointSet(const DisjointSet& djs) { copy(djs); }
+
+        DisjointSet& operator=(const DisjointSet& djs) {
+            if (&djs != this) {
+                erase();
+                copy(djs);
+            }
+
+            return *this;
+        }
+
+        ~DisjointSet() { erase(); }
+
+
         void makeSet(T& data) {
             auto node = new DisjointSetNode(data);
             nodesMap.insert(data, node);
@@ -44,6 +58,19 @@ namespace Tree {
             }
         }
 
+        bool isRoot() {
+            return this == parent;
+        }
+
+        bool inSameSet(T&& left, T&& right) {
+            auto firstNodeMap = nodesMap.find(first);
+            auto secondNodeMap = nodesMap.find(second);
+
+            return firstNodeMap != nodesMap.end() &&
+                secondNodeMap != nodesMap.end() &&
+                firstNodeMap->second == secondNodeMap->second;
+        }
+
         DisjointSetNode<T>* find(T& data) {
             auto nodeMap = nodesMap.find(data);
             if (node != nodesMap.end()) {
@@ -58,9 +85,13 @@ namespace Tree {
             return nullptr;
         }
 
-        ~DisjointSet() { erase(); }
-
     private:
+        void copy(const DisjointSet& djs) {
+            data = djs.data;
+            depth = djs.depth;
+            parent = new DisjointSet(djs.parent);
+        }
+
         void erase() {
             for (auto& nodeMap : nodesMap) {
                 delete nodeMap->second;

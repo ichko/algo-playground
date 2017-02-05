@@ -1,6 +1,6 @@
 #pragma once
 
-#include "node.cpp"
+#include "trie-node.cpp"
 
 namespace Trees {
 
@@ -14,45 +14,45 @@ namespace Trees {
     public:
         Trie() : root(ROOT_VALUE) {}
 
-        void insert(T* values, unit size) {
-            auto parent = find(&root, values, size);
+        void Insert(T* values, unit size) {
+            auto parent = Find(&root, values, size);
 
             if (parent != nullptr) {
-                for (auto i = parent->get_level(); i < size; i++) {
+                for (auto i = parent->GetLevel(); i < size; i++) {
                     auto old_parent = parent;
-                    parent = parent->insert(values[i]);
-                    parent->set_level(old_parent->get_level() + 1);
-                    parent->set_parent(old_parent);
+                    parent = parent->Insert(values[i]);
+                    parent->SetLevel(old_parent->GetLevel() + 1);
+                    parent->SetParent(old_parent);
                 }
-                parent->set_leaf(true);
+                parent->SetLeaf(true);
             }
         }
 
-        bool contains(T* values, unit size) {
-            auto node = find(&root, values, size);
-            return node != nullptr && node->is_leaf() && node->get_level() == size;
+        bool Contains(T* values, unit size) {
+            auto node = Find(&root, values, size);
+            return node != nullptr && node->IsLeaf() && node->GetLevel() == size;
         }
 
-        bool contains_prefix(T* values, unit size) {
-            auto node = find(&root, values, size);
-            return node != nullptr && node->get_level() == size;
+        bool ContainsPrefix(T* values, unit size) {
+            auto node = Find(&root, values, size);
+            return node != nullptr && node->GetLevel() == size;
         }
 
-        void erase(T* values, unit size) {
-            auto node = find(&root, values, size);
-            if (node != nullptr && node->is_leaf() && node->get_level() == size && size > 0) {
-                node->set_leaf(false);
-                if (node->get_num_children() > 0) return;
+        void Erase(T* values, unit size) {
+            auto node = Find(&root, values, size);
+            if (node != nullptr && node->IsLeaf() && node->GetLevel() == size && size > 0) {
+                node->SetLeaf(false);
+                if (node->GetChildrenSize() > 0) return;
 
-                auto parent = node->get_parent();
+                auto parent = node->GetParent();
                 auto old_parent = parent;
-                while (parent != nullptr && !(parent->get_num_children() > 1)) {
+                while (parent != nullptr && !(parent->GetChildrenSize() > 1)) {
                     old_parent = parent;
-                    parent = parent->get_parent();
+                    parent = parent->GetParent();
                 }
 
                 if (parent != nullptr) {
-                    parent->erase(old_parent->get_value());
+                    parent->Erase(old_parent->GetValue());
                 }
             };
         }
@@ -63,12 +63,12 @@ namespace Trees {
         }
 
     private:
-        TrieNode<T>* find(TrieNode<T>* parent, T* values, unit size) {
+        TrieNode<T>* Find(TrieNode<T>* parent, T* values, unit size) {
             auto old_parent = parent;
             for (auto i = 0; i < size; i++) {
                 if (parent != nullptr) {
                     old_parent = parent;
-                    parent = parent->get_child(values[i]);
+                    parent = parent->GetChild(values[i]);
                 }
                 else {
                     return old_parent;
