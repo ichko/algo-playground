@@ -15,29 +15,30 @@ namespace Tree {
 
     template <typename T> class DisjointSet {
 
-        map<T, DisjointSetNode<T>* > nodesMap;
+        map<T, DisjointSetNode<T>*> nodesMap;
 
     public:
-        DisjointSet(const DisjointSet& djs) { copy(djs); }
+        DisjointSet() { }
+
+        DisjointSet(const DisjointSet& djs) { Copy(djs); }
 
         DisjointSet& operator=(const DisjointSet& djs) {
             if (&djs != this) {
-                erase();
-                copy(djs);
+                Erase();
+                Copy(djs);
             }
 
             return *this;
         }
 
-        ~DisjointSet() { erase(); }
+        ~DisjointSet() { Erase(); }
 
-
-        void makeSet(T& data) {
-            auto node = new DisjointSetNode(data);
-            nodesMap.insert(data, node);
+        void MakeSet(T& data) {
+            auto node = new DisjointSetNode<T>(data);
+            nodesMap.insert({ data, node });
         }
 
-        void unionSets(T& first, T& second) {
+        void UnionSets(T& first, T& second) {
             auto firstNodeMap = nodesMap.find(first);
             auto secondNodeMap = nodesMap.find(second);
 
@@ -48,53 +49,53 @@ namespace Tree {
                 if (firstNode != secondNode) {
                     if (firstNode->depth < secondNode->depth) {
                         firstNode->parent = secondNode;
-                        secondNode += firstNode->depth;
+                        secondNode->depth += firstNode->depth;
                     }
                     else {
                         secondNode->parent = firstNode;
-                        firstNode += secondNode->depth;
+                        firstNode->depth += secondNode->depth;
                     }
                 }
             }
         }
 
-        bool isRoot() {
+        bool IsRoot() {
             return this == parent;
         }
 
-        bool inSameSet(T&& left, T&& right) {
-            auto firstNodeMap = nodesMap.find(first);
-            auto secondNodeMap = nodesMap.find(second);
+        bool InSameSet(T&& first, T&& second) {
+            auto firstNode = Find(first);
+            auto secondNode = Find(second);
 
-            return firstNodeMap != nodesMap.end() &&
-                secondNodeMap != nodesMap.end() &&
-                firstNodeMap->second == secondNodeMap->second;
+            return firstNode != nullptr &&
+                secondNode != nullptr &&
+                firstNode == secondNode;
         }
 
-        DisjointSetNode<T>* find(T& data) {
+        DisjointSetNode<T>* Find(T& data) {
             auto nodeMap = nodesMap.find(data);
-            if (node != nodesMap.end()) {
+            if (nodeMap != nodesMap.end()) {
                 auto node = nodeMap->second;
-                while (node != node->parent) {
-                    node.parent = find(node->parent->data);
+                if (node != node->parent) {
+                    node->parent = Find(node->parent->data);
                 }
 
-                return node;
+                return node->parent;
             }
 
             return nullptr;
         }
 
     private:
-        void copy(const DisjointSet& djs) {
+        void Copy(const DisjointSet& djs) {
             data = djs.data;
             depth = djs.depth;
             parent = new DisjointSet(djs.parent);
         }
 
-        void erase() {
+        void Erase() {
             for (auto& nodeMap : nodesMap) {
-                delete nodeMap->second;
+                delete nodeMap.second;
             }
         }
 
