@@ -3,7 +3,7 @@
 #include <map>
 using std::map;
 
-namespace Tree {
+namespace DataStructures {
 
     template <typename T> struct DisjointSetNode {
         T data;
@@ -15,7 +15,7 @@ namespace Tree {
 
     template <typename T> class DisjointSet {
 
-        map<T, DisjointSetNode<T>*> nodesMap;
+        map<T, DisjointSetNode<T>*> nodes_map;
 
     public:
         DisjointSet() { }
@@ -35,25 +35,25 @@ namespace Tree {
 
         void MakeSet(T& data) {
             auto node = new DisjointSetNode<T>(data);
-            nodesMap.insert({ data, node });
+            nodes_map.insert({ data, node });
         }
 
         void UnionSets(T& first, T& second) {
-            auto firstNodeMap = nodesMap.find(first);
-            auto secondNodeMap = nodesMap.find(second);
+            auto first_node_map = nodes_map.find(first);
+            auto second_node_map = nodes_map.find(second);
 
-            if (firstNodeMap != nodesMap.end() && secondNodeMap != nodesMap.end()) {
-                auto firstNode = firstNodeMap->second;
-                auto secondNode = secondNodeMap->second;
+            if (first_node_map != nodes_map.end() && second_node_map != nodes_map.end()) {
+                auto first_node = first_node_map->second;
+                auto second_node = second_node_map->second;
 
-                if (firstNode != secondNode) {
-                    if (firstNode->depth < secondNode->depth) {
-                        firstNode->parent = secondNode;
-                        secondNode->depth += firstNode->depth;
+                if (first_node != second_node) {
+                    if (first_node->depth < second_node->depth) {
+                        first_node->parent = second_node;
+                        second_node->depth += first_node->depth;
                     }
                     else {
-                        secondNode->parent = firstNode;
-                        firstNode->depth += secondNode->depth;
+                        second_node->parent = first_node;
+                        first_node->depth += second_node->depth;
                     }
                 }
             }
@@ -64,18 +64,18 @@ namespace Tree {
         }
 
         bool InSameSet(T&& first, T&& second) {
-            auto firstNode = Find(first);
-            auto secondNode = Find(second);
+            auto first_node = Find(first);
+            auto second_node = Find(second);
 
-            return firstNode != nullptr &&
-                secondNode != nullptr &&
-                firstNode == secondNode;
+            return first_node != nullptr &&
+                second_node != nullptr &&
+                first_node == second_node;
         }
 
         DisjointSetNode<T>* Find(T& data) {
-            auto nodeMap = nodesMap.find(data);
-            if (nodeMap != nodesMap.end()) {
-                auto node = nodeMap->second;
+            auto node_map = nodes_map.find(data);
+            if (node_map != nodes_map.end()) {
+                auto node = node_map->second;
                 if (node != node->parent) {
                     node->parent = Find(node->parent->data);
                 }
@@ -94,8 +94,8 @@ namespace Tree {
         }
 
         void Erase() {
-            for (auto& nodeMap : nodesMap) {
-                delete nodeMap.second;
+            for (auto& node_map : nodes_map) {
+                delete node_map.second;
             }
         }
 

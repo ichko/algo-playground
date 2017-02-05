@@ -1,5 +1,6 @@
 #include <iostream>
 #include "includes/trie.cpp"
+#include "includes/graph.cpp"
 #include "includes/disjoint-set.cpp"
 
 using namespace std;
@@ -9,13 +10,12 @@ void DisjointSetTest() {
     int zero = 0;
     int fifty = 50;
 
-    Tree::DisjointSet<int> djs;
+    DataStructures::DisjointSet<int> djs;
     djs.MakeSet(fifty);
 
     for (int i = 0; i < 50; i++) {
         djs.MakeSet(i);
         djs.UnionSets(zero, i);
-        cout << djs.Find(i)->data << endl;
     }
 
     cout << djs.InSameSet(5, 10) << djs.InSameSet(0, 49) <<
