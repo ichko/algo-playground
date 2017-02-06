@@ -3,7 +3,7 @@
 #include <map>
 using std::map;
 
-namespace DataStructures {
+namespace DSAA {
 
     template <typename T> struct DisjointSetNode {
         T data;

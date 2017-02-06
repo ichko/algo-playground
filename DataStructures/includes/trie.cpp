@@ -2,7 +2,7 @@
 
 #include "trie-node.cpp"
 
-namespace DataStructures {
+namespace DSAA {
 
     typedef int unit;
     #define ROOT_VALUE '#'

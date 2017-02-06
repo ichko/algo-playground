@@ -15,7 +15,7 @@ using std::sort;
 #define Edge GraphEdge<T>
 
 
-namespace DataStructures {
+namespace DSAA {
 
     template <typename T> struct GraphNode {
 
@@ -60,33 +60,12 @@ namespace DataStructures {
             }
         }
 
-        vector<Edge*> GetMinimalSpanningTree() {
-            vector<Edge*> result;
-            vector<Edge*> sorted_edges;
-            DisjointSet<Vertex*> djs;
+        auto GetVertecies() {
+            return &nodes;
+        }
 
-            for (auto& edge_map : edges) {
-                sorted_edges.push_back(edge_map.second);
-            }
-
-            sort(sorted_edges.begin(), sorted_edges.end(),
-                [](const Edge* left, const Edge* right) -> int
-            {
-                return left->weight < right->weight;
-            });
-
-            for (auto& node_map : nodes) {
-                djs.MakeSet(node_map.second);
-            }
-
-            for (auto& edge : sorted_edges) {
-                if (!djs.InSameSet(edge->from, edge->to)) {
-                    result.push_back(edge);
-                    djs.UnionSets(edge->from, edge->to);
-                }
-            }
-
-            return result;
+        auto GetEdges() {
+            return &edges;
         }
 
     private:

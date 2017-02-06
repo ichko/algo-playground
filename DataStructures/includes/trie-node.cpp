@@ -2,7 +2,7 @@
 
 #include <map>
 
-namespace DataStructures {
+namespace DSAA {
 
     typedef int unit;
 

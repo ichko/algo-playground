@@ -2,12 +2,13 @@
 #include "includes/trie.cpp"
 #include "includes/graph.cpp"
 #include "includes/disjoint-set.cpp"
+#include "includes/algorithms.cpp"
 
 using namespace std;
 
 
 void KruskalTest() {
-    DataStructures::Graph<int> graph;
+    DSAA::Graph<int> graph;
     graph.InsertEdge(1, 5, 7);
     graph.InsertEdge(2, 1, 4);
     graph.InsertEdge(2, 4, 3);
@@ -15,7 +16,7 @@ void KruskalTest() {
     graph.InsertEdge(3, 4, 1);
     graph.InsertEdge(5, 2, 1);
 
-    auto tree = graph.GetMinimalSpanningTree();
+    auto tree = DSAA::GetMinimalSpanningTree(graph);
     for (auto& edge : tree) {
         cout << edge->from->value << " - " << edge->to->value << endl;
     }
@@ -25,7 +26,7 @@ void DisjointSetTest() {
     int zero = 0;
     int fifty = 50;
 
-    DataStructures::DisjointSet<int> djs;
+    DSAA::DisjointSet<int> djs;
     djs.MakeSet(fifty);
 
     for (int i = 0; i < 50; i++) {
@@ -39,7 +40,7 @@ void DisjointSetTest() {
 }
 
 void TrieTest() {
-    DataStructures::Trie<char> trie;
+    DSAA::Trie<char> trie;
 
     trie.Insert("banana", 6);
     trie.Insert("bbnana", 6);
