@@ -34,10 +34,6 @@ namespace DataStructures {
         GraphEdge(Vertex* _from, Vertex* _to, int _weight = 0) :
             from(_from), to(_to), weight(_weight) { }
 
-        bool operator<(const Edge& edge) const {
-            return weight < edge.weight;
-        }
-
     };
 
 
@@ -53,29 +49,37 @@ namespace DataStructures {
             nodes.insert({ value, node })
         }
 
-        void InsertEdge(T& from, T& to, int weight = 0) {
+        void InsertEdge(T&& from, T&& to, int weight = 0) {
             auto edge = edges.find({ from, to });
             if (edge == edges.end()) {
                 auto from_node = RetrieveVertex(from);
                 auto to_node = RetrieveVertex(to);
 
                 auto new_edge = new Edge(from_node, to_node, weight);
-                edges.insert({ make_pair(from, to), new_edge })
+                edges.insert({ make_pair(from, to), new_edge });
             }
         }
 
         vector<Edge*> GetMinimalSpanningTree() {
             vector<Edge*> result;
+            vector<Edge*> sorted_edges;
             DisjointSet<Vertex*> djs;
 
-            sort(edges.begin(), edges.end());
+            for (auto& edge_map : edges) {
+                sorted_edges.push_back(edge_map.second);
+            }
+
+            sort(sorted_edges.begin(), sorted_edges.end(),
+                [](const Edge* left, const Edge* right) -> int
+            {
+                return left->weight < right->weight;
+            });
 
             for (auto& node_map : nodes) {
                 djs.MakeSet(node_map.second);
             }
 
-            for (auto& edge_map : edges) {
-                auto edge = edge_map.second;
+            for (auto& edge : sorted_edges) {
                 if (!djs.InSameSet(edge->from, edge->to)) {
                     result.push_back(edge);
                     djs.UnionSets(edge->from, edge->to);
@@ -90,7 +94,7 @@ namespace DataStructures {
             auto node_map = nodes.find(value);
 
             if (node_map != nodes.end()) {
-                return node_map.second;
+                return node_map->second;
             }
 
             auto new_node = new Vertex(value);

@@ -2,7 +2,7 @@
 
 #include <map>
 
-namespace Trees {
+namespace DataStructures {
 
     typedef int unit;
 

@@ -7,7 +7,18 @@ using namespace std;
 
 
 void KruskalTest() {
+    DataStructures::Graph<int> graph;
+    graph.InsertEdge(1, 5, 7);
+    graph.InsertEdge(2, 1, 4);
+    graph.InsertEdge(2, 4, 3);
+    graph.InsertEdge(2, 3, 2);
+    graph.InsertEdge(3, 4, 1);
+    graph.InsertEdge(5, 2, 1);
 
+    auto tree = graph.GetMinimalSpanningTree();
+    for (auto& edge : tree) {
+        cout << edge->from->value << " - " << edge->to->value << endl;
+    }
 }
 
 void DisjointSetTest() {
@@ -28,7 +39,7 @@ void DisjointSetTest() {
 }
 
 void TrieTest() {
-    Trees::Trie<char> trie;
+    DataStructures::Trie<char> trie;
 
     trie.Insert("banana", 6);
     trie.Insert("bbnana", 6);

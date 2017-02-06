@@ -63,7 +63,7 @@ namespace DataStructures {
             return this == parent;
         }
 
-        bool InSameSet(T&& first, T&& second) {
+        bool InSameSet(T first, T second) {
             auto first_node = Find(first);
             auto second_node = Find(second);
 
