@@ -6,6 +6,10 @@
 using namespace std;
 
 
+void KruskalTest() {
+
+}
+
 void DisjointSetTest() {
     int zero = 0;
     int fifty = 50;
@@ -42,5 +46,6 @@ void TrieTest() {
 
 int main() {
     // TrieTest();
-    DisjointSetTest();
+    // DisjointSetTest();
+    KruskalTest();
 }

@@ -56,27 +56,47 @@ namespace DataStructures {
         void InsertEdge(T& from, T& to, int weight = 0) {
             auto edge = edges.find({ from, to });
             if (edge == edges.end()) {
-                auto new_edge = new Edge(from, to, weight);
+                auto from_node = RetrieveVertex(from);
+                auto to_node = RetrieveVertex(to);
+
+                auto new_edge = new Edge(from_node, to_node, weight);
                 edges.insert({ make_pair(from, to), new_edge })
             }
         }
 
-        DisjointSet<Edge*> GetMinimalSpanningTree() {
-            DisjointSet<Vertex*> result;
+        vector<Edge*> GetMinimalSpanningTree() {
+            vector<Edge*> result;
+            DisjointSet<Vertex*> djs;
+
             sort(edges.begin(), edges.end());
 
             for (auto& node_map : nodes) {
-                result.MakeSet(node_map.second);
+                djs.MakeSet(node_map.second);
             }
 
             for (auto& edge_map : edges) {
                 auto edge = edge_map.second;
-                if (!result.InSameSet(edge->from, edge->to)) {
-                    result.UnionSets(edge->from, edge->to);
+                if (!djs.InSameSet(edge->from, edge->to)) {
+                    result.push_back(edge);
+                    djs.UnionSets(edge->from, edge->to);
                 }
             }
 
             return result;
+        }
+
+    private:
+        Vertex* RetrieveVertex(T& value) {
+            auto node_map = nodes.find(value);
+
+            if (node_map != nodes.end()) {
+                return node_map.second;
+            }
+
+            auto new_node = new Vertex(value);
+            nodes.insert({ value, new_node });
+
+            return new_node;
         }
 
     };
