@@ -95,8 +95,8 @@ def mini(state):
 
 
 def get_free_moves(state): 
-    return ((i % 3, i // 3) for i, s in enumerate(state)
-            if s == free_space)
+    return [(i % 3, i // 3) for i, s in enumerate(state)
+            if s == free_space]
 
 
 class MinmaxPlayer:
@@ -113,8 +113,8 @@ class RealPlayer:
         self.symbol = symbol
 
     def get_move(self, _):
-        # return list(map(int, input().split(' ')))
-        return randrange(0, 3), randrange(0, 3)
+        return list(map(int, input().split(' ')))
+        # return randrange(0, 3), randrange(0, 3)
 
 
 def there_is_winner(state):
@@ -132,10 +132,13 @@ if __name__ == '__main__':
     ):
         clear_screen()
         print_state(current_state)
+        current_player, _ = players
 
         while True:
-            current_player, _ = players
-            move = current_player.get_move(current_state[::])
+            move = get_free_moves(current_state)[0]
+            if current_state.count(free_space) > 1:
+                move = current_player.get_move(current_state[::])
+
             if is_valid_move(move, current_state):
                 current_state = apply_move(
                     move, current_state,
