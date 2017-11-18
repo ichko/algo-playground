@@ -1,5 +1,6 @@
 from subprocess import call as sub_call
 from math import inf
+from random import randrange
 
 
 free_space = '_'
@@ -112,7 +113,7 @@ class RealPlayer:
 
     def get_move(self, _):
         # return list(map(int, input().split(' ')))
-        return 0, 0
+        return randrange(0, 3), randrange(0, 3)
 
 
 if __name__ == '__main__':
@@ -140,4 +141,11 @@ if __name__ == '__main__':
             print('invalid move')
 
     _, winner = players
-    print('Winner is %s' % winner)
+    clear_screen()
+    print_state(current_state)
+
+    if is_winner(current_state, ai_symbol) or \
+       is_winner(current_state, user_symbol):
+       print('winner is [%s]' % winner.symbol)
+    else:
+        print('draw')
