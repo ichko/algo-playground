@@ -73,7 +73,7 @@ def maxi(state, best_max=-inf, best_min=inf):
             current_move = move
         if mini_val > best_max:
             best_max = mini_val
-        if mini_val > best_min:
+        if mini_val >= best_min:
             break
 
     return current_val, current_move
@@ -96,7 +96,7 @@ def mini(state, best_max=-inf, best_min=-inf):
             current_move = move
         if maxi_val < best_min:
             best_min = maxi_val
-        if maxi_val < best_max:
+        if maxi_val <= best_max:
             break
 
     return current_val, current_move
@@ -120,9 +120,11 @@ class RealPlayer:
     def __init__(self, symbol):
         self.symbol = symbol
 
-    def get_move(self, _):
-        return list(map(int, input().split(' ')))
+    def get_move(self, state):
+        # _, move = mini(state)
+        # return move
         # return randrange(0, 3), randrange(0, 3)
+        return list(map(int, input().split(' ')))
 
 
 def there_is_winner(state):
