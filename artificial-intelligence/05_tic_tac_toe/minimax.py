@@ -14,7 +14,7 @@ class UserPlayer:
         self.symbol = symbol
 
     def get_move(self, _):
-        return map(int, input().split(' '))
+        return list(map(int, input().split(' ')))
 
 
 def get_start_state():
@@ -35,12 +35,16 @@ def apply_move(move, state, symbol):
     return state
 
 def solved(state):
-    is_group_solved = lambda group: len(set(group)) == len(group)
+    is_solved = lambda group: len(set(group)) == len(group)
     return all(
-        is_group_solved(state[:3]),
-        is_group_solved(state[3:6]),
-        is_group_solved(state[6:]),
-        is_group_solved([state[1]])
+        is_solved(state[:3]),
+        is_solved(state[3:6]),
+        is_solved(state[6:]),
+        is_solved([(i * 3) + 0 for i in range(3)])
+        is_solved([(i * 3) + 1 for i in range(3)])
+        is_solved([(i * 3) + 2 for i in range(3)])
+        is_solved([i * 3 + i for i in range(3)]) # Diagonal
+        is_solved([(i + 1) * 3 - (i + 1) for i in range(3)]) # Other diagonal
     )
 
 
