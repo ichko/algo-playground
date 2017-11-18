@@ -22,7 +22,7 @@ def print_state(state):
     print(' | '.join(state[6:]))
 
 
-def valid_move(move, state):
+def is_valid_move(move, state):
     x, y = move
     return state[x + y * 3] == free_space
 
@@ -116,36 +116,39 @@ class RealPlayer:
         return randrange(0, 3), randrange(0, 3)
 
 
+def there_is_winner(state):
+    return is_winner(current_state, ai_symbol) or \
+        is_winner(current_state, user_symbol)
+
 if __name__ == '__main__':
     players = RealPlayer(user_symbol), MinmaxPlayer(ai_symbol)
     current_state = get_start_state()
 
     while not (
-        is_winner(current_state, ai_symbol) or \
-        is_winner(current_state, user_symbol) or \
+        there_is_winner(current_state) or \
         is_draw(current_state)
     ):
         clear_screen()
         print_state(current_state)
 
-        current_player, _ = players
-        move = current_player.get_move(current_state[::])
-
-        if valid_move(move, current_state):
-            current_state = apply_move(
-                move, current_state,
-                current_player.symbol
-            )
-            players = players[::-1]
-        else:
-            print('invalid move')
+        while True:
+            current_player, _ = players
+            move = current_player.get_move(current_state[::])
+            if is_valid_move(move, current_state):
+                current_state = apply_move(
+                    move, current_state,
+                    current_player.symbol
+                )
+                players = players[::-1]
+                break
+            else:
+                print('invalid move')
 
     _, winner = players
     clear_screen()
     print_state(current_state)
 
-    if is_winner(current_state, ai_symbol) or \
-       is_winner(current_state, user_symbol):
+    if there_is_winner(current_state):
        print('winner is [%s]' % winner.symbol)
     else:
         print('draw')
