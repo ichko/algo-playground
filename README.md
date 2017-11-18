@@ -32,4 +32,4 @@ for (auto& edge : tree) {
 2 - 1
 ```
 
-![alt tag](Assets/mst.png)
+![alt tag](assets/mst.png)
