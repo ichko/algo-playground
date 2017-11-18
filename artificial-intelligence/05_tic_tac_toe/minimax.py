@@ -56,7 +56,7 @@ def is_winner(state, symbol):
     ])
 
 
-def maxi(state):
+def maxi(state, best_max=-inf, best_min=inf):
     if is_winner(state, user_symbol):
         return 0, None
     elif is_winner(state, ai_symbol):
@@ -71,11 +71,15 @@ def maxi(state):
         if mini_val > current_val:
             current_val = mini_val
             current_move = move
+        if mini_val > best_max:
+            best_max = mini_val
+        if mini_val > best_min:
+            break
 
     return current_val, current_move
 
 
-def mini(state):
+def mini(state, best_max=-inf, best_min=-inf):
     if is_winner(state, user_symbol):
         return 0, None
     elif is_winner(state, ai_symbol):
@@ -90,6 +94,10 @@ def mini(state):
         if maxi_val < current_val:
             current_val = maxi_val
             current_move = move
+        if maxi_val < best_min:
+            best_min = maxi_val
+        if maxi_val < best_max:
+            break
 
     return current_val, current_move
 
