@@ -1,12 +1,21 @@
-# Data Structures in C++
-Implementing different data structures and algorithms in C++
+# Playground for data structures and algorithms
 
 ## Content
+### Data structures
  - Trie
  - Disjoint Set
  - Graph
 
+### AI Algorithms / Problems
+ - DFS / Traversing search space
+ - A Star / Informed traversing of search space (Sliding blocks)
+ - Min-conflict (Solving N-Queens)
+ - Genetic algorithms (Knapsack problem)
+ - Minimax with alpha-beta pruning (Tic-Tac-Toe)
+
+
 ## Examples
+
 ### Kruskal's algorithms
 
 ```cpp
