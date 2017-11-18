@@ -29,8 +29,9 @@ def is_valid_move(move, state):
 
 def apply_move(move, state, symbol):
     x, y = move
-    state[x + y * 3] = symbol
-    return state
+    new_state = state[::]
+    new_state[x + y * 3] = symbol
+    return new_state
 
 
 def is_draw(state):
@@ -58,10 +59,10 @@ def is_winner(state, symbol):
 def maxi(state):
     if is_winner(state, user_symbol):
         return 0, None
-    elif is_draw(state):
-        return 1, None
     elif is_winner(state, ai_symbol):
         return 2, None
+    elif is_draw(state):
+        return 1, None
 
     current_val, current_move = -inf, None
     for move in get_free_moves(state):
@@ -77,10 +78,10 @@ def maxi(state):
 def mini(state):
     if is_winner(state, user_symbol):
         return 0, None
-    elif is_draw(state):
-        return 1, None
     elif is_winner(state, ai_symbol):
         return 2, None
+    elif is_draw(state):
+        return 1, None
 
     current_val, current_move = inf, None
     for move in get_free_moves(state):
@@ -119,6 +120,7 @@ class RealPlayer:
 def there_is_winner(state):
     return is_winner(current_state, ai_symbol) or \
         is_winner(current_state, user_symbol)
+
 
 if __name__ == '__main__':
     players = RealPlayer(user_symbol), MinmaxPlayer(ai_symbol)
