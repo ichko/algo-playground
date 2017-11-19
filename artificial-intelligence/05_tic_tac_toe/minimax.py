@@ -56,7 +56,7 @@ def is_winner(state, symbol):
     ])
 
 
-def maxi(state, best_max=-inf, best_min=inf):
+def minimax(state, best_max=-inf, best_min=inf, is_max=True):
     if is_winner(state, user_symbol):
         return 0, None
     elif is_winner(state, ai_symbol):
@@ -64,42 +64,34 @@ def maxi(state, best_max=-inf, best_min=inf):
     elif is_draw(state):
         return 1, None
 
-    current_val, current_move = -inf, None
-    for move in get_free_moves(state):
-        next_state = apply_move(move, state, ai_symbol)
-        mini_val, _ = mini(next_state)
-        if mini_val > current_val:
-            current_val = mini_val
-            current_move = move
-        if mini_val > best_max:
-            best_max = mini_val
-        if mini_val >= best_min:
-            break
+    current_val, current_move = -inf if is_max else inf, None
+
+    if is_max:
+        for move in get_free_moves(state):
+            next_state = apply_move(move, state, ai_symbol)
+            mini_val, _ = minimax(next_state, best_max, best_min, False)
+            if mini_val > current_val:
+                current_val = mini_val
+                current_move = move
+            if mini_val > best_max:
+                best_max = mini_val
+            if mini_val >= best_min:
+                break
+    else:
+        current_val, current_move = inf, None
+        for move in get_free_moves(state):
+            next_state = apply_move(move, state, user_symbol)
+            maxi_val, _ = minimax(next_state, best_max, best_min, True)
+            if maxi_val < current_val:
+                current_val = maxi_val
+                current_move = move
+            if maxi_val < best_min:
+                best_min = maxi_val
+            if maxi_val <= best_max:
+                break
 
     return current_val, current_move
 
-
-def mini(state, best_max=-inf, best_min=-inf):
-    if is_winner(state, user_symbol):
-        return 0, None
-    elif is_winner(state, ai_symbol):
-        return 2, None
-    elif is_draw(state):
-        return 1, None
-
-    current_val, current_move = inf, None
-    for move in get_free_moves(state):
-        next_state = apply_move(move, state, user_symbol)
-        maxi_val, _ = maxi(next_state)
-        if maxi_val < current_val:
-            current_val = maxi_val
-            current_move = move
-        if maxi_val < best_min:
-            best_min = maxi_val
-        if maxi_val <= best_max:
-            break
-
-    return current_val, current_move
 
 
 def get_free_moves(state): 
@@ -112,7 +104,7 @@ class MinmaxPlayer:
         self.symbol = symbol
 
     def get_move(self, state):
-        _, move = maxi(state)
+        _, move = minimax(state)
         return move
 
 
@@ -121,7 +113,7 @@ class RealPlayer:
         self.symbol = symbol
 
     def get_move(self, state):
-        # _, move = mini(state)
+        # _, move = minimax(state, is_max=False)
         # return move
         # return randrange(0, 3), randrange(0, 3)
         return list(map(int, input().split(' ')))
