@@ -2,7 +2,7 @@ from collections import Counter
 
 
 def sq_dist(a, b):
-    return sum((xa - xb) ** 2 for for xa, xb in zip(a, b))
+    return sum((xa - xb) ** 2 for xa, xb in zip(a, b))
 
 
 def mode(arr):
@@ -24,5 +24,6 @@ class KNN:
 
 
 if __name__ == '__main__':
-    pass
-
+    k = int(input())
+    knn = KNN(k)
+    knn.predict()
