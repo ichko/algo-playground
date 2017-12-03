@@ -46,6 +46,14 @@ def ladder_decompose(paths, root):
     return ladders
 
 
+def node_jumpers(nodes, size):
+    jumpers = []
+    for node in nodes:
+        for i in range(round(log(size, 2))):
+            pass
+    return jumpers
+
+
 class Node:
     def __init__(self, value):
         self.value = value
@@ -71,6 +79,7 @@ class Tree:
         leaves = list(get_leaves(self.root))
         leaves = count_sort(leaves, key=lambda l: l.level)
         leaves.reverse()
+
         paths = max_path_decompose(leaves, self.root)
         ladder = ladder_decompose(paths)
 
