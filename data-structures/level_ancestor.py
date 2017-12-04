@@ -46,6 +46,15 @@ def ladder_decompose(paths, root):
     return ladders
 
 
+def ge_path_map(paths):
+    path_map = dict()
+    for path in path:
+        for node in path:
+            path_map[node] = path
+
+    return path_map
+
+
 def node_jumpers(nodes, size):
     jumpers = []
     for node in nodes:
