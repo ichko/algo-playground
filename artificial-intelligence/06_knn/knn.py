@@ -27,6 +27,11 @@ class KNN:
 
         return y
 
+    def score(self, X, y):
+        y_hat = self.predict(X)
+        return sum(int(y_hat_i == y_i)
+            for y_hat_i, y_i in zip(y_hat, y)) / len(y)
+
 
 if __name__ == '__main__':
     # k = int(input())
