@@ -1,4 +1,28 @@
 from collections import Counter
+import csv
+from random import shuffle
+
+
+def xy_split(data):
+    return [x[0:-1] for x in data], \
+           [x[-1] for x in data]
+
+
+def read_file(file_name):
+    with open(file_name, newline='') as file:
+        data = list(csv.reader(file, delimiter=',', quotechar='\n'))
+        X, y = xy_split(data)
+        return [[float(el) for el in row] for row in X], y
+
+
+def stratify_split(X, y, test_size):
+    data = list(zip(X, y))
+    shuffle(data)
+
+    test_X, test_y = xy_split(data[:test_size])
+    train_X, train_y = xy_split(data[test_size:])
+
+    return train_X, train_y, test_X, test_y
 
 
 def sq_dist(a, b):
@@ -36,11 +60,11 @@ class KNN:
 if __name__ == '__main__':
     # k = int(input())
 
-    X = [[1, 1], [2, 2]]
-    y = [3.14, 2]
-    X_test = [[0, 0]]
+    X, y = read_file('iris.txt')
+    train_X, train_y, test_X, test_y = stratify_split(X, y, 20)
 
-    knn = KNN(1)
-    knn.fit(X, y)
-    y_test = knn.predict(X_test)
-    print(y_test)
+    knn = KNN(10)
+    knn.fit(train_X, train_y)
+
+    score = knn.score(test_X, test_y)
+    print(score)
