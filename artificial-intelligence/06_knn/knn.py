@@ -58,8 +58,7 @@ class KNN:
 
 
 if __name__ == '__main__':
-    # k = int(input())
-    k = 10
+    k = int(input())
 
     X, y = read_file('iris.txt')
     train_X, train_y, test_X, test_y = stratify_split(X, y, 20)
@@ -69,5 +68,11 @@ if __name__ == '__main__':
     knn = KNN(k)
     knn.fit(train_X, train_y)
 
+    predict_y = knn.predict(test_X)
     score = knn.score(test_X, test_y)
+
+    print('features - expected - actual')
+    for i in range(len(test_y)):
+        print(test_X[i], '-', predict_y[i], '-', test_y[i])
+
     print(score)
