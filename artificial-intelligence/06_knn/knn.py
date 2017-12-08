@@ -16,7 +16,7 @@ def read_file(file_name):
 
 
 def stratify_split(X, y, test_size):
-    data = list(zip(X, y))
+    data = [x + [y] for x, y in zip(X, y)]
     shuffle(data)
 
     test_X, test_y = xy_split(data[:test_size])
@@ -59,11 +59,14 @@ class KNN:
 
 if __name__ == '__main__':
     # k = int(input())
+    k = 10
 
     X, y = read_file('iris.txt')
     train_X, train_y, test_X, test_y = stratify_split(X, y, 20)
 
-    knn = KNN(10)
+    print(train_X)
+
+    knn = KNN(k)
     knn.fit(train_X, train_y)
 
     score = knn.score(test_X, test_y)
