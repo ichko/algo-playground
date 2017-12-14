@@ -1,11 +1,16 @@
 import csv
 from functools import reduce
 from operator import mul
+from random import shuffle
+from math import ceil
 
 
 def read_file(file_name):
   with open(file_name, newline='') as file:
-    data = list(csv.reader(file, delimiter=',', quotechar='\n'))
+    return list(csv.reader(file, delimiter=',', quotechar='\n'))
+
+
+def xy_split(data):
     return [row[1:] for row in data], [row[0] for row in data]
 
 
@@ -29,6 +34,26 @@ def get_probability(data, col_a, col_b):
       ) / get_frequency(data, [(col_a, cls_a)])
 
   return frequency
+
+
+def k_fold_cross_val(model, data, k):
+  scores = []
+  shuffle(data)
+  frame_size = ceil(len(data) / k)
+  frames = [data[i * frame_size:(i + 1) * frame_size]
+            for i in range(k)]
+
+  for i in range(k):
+    X_test, y_test = xy_split(frames[i])
+    X_train, y_train = xy_split(sum(frames[:i] + frames[i + 1:], [])) 
+    model.fit(X_train, y_train)
+    scores.append(model.score(X_test, y_test))
+
+  return scores
+
+
+def mean(arr):
+  return sum(arr) / len(arr)
 
 
 class NaiveBayes:
@@ -67,9 +92,11 @@ class NaiveBayes:
 
 
 if __name__ == '__main__':
-  X, y = read_file('voting.data')
+  data = read_file('voting.data')
 
-  model = NaiveBayes().fit(X, y)
-  score = model.score(X, y)
+  model = NaiveBayes()
+  cross_val_scores = k_fold_cross_val(model, data, k=10)
+  cross_val_scores = [round(num, 2) for num in cross_val_scores]
 
-  print(score)
+  print('cross validation:\n  ', cross_val_scores)
+  print('mean score:\n  ', round(mean(cross_val_scores), 5))
