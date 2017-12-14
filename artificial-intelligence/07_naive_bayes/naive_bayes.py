@@ -59,13 +59,19 @@ def mean(arr):
 class NaiveBayes:
   def __init__(self):
     self.probabilities = []
+    self.label_cls_prob = dict()
     self.label_classes = None
 
   def fit(self, X, y):
     data = [x + [y] for x, y in zip(X, y)]
     self.label_classes = get_cls_set(data, -1)
+
     for col in range(len(data[0])):
       self.probabilities.append(get_probability(data, col, -1))
+
+    for label_cls in self.label_classes:
+      self.label_cls_prob[label_cls] = \
+        get_frequency(data, [(-1, label_cls)]) / len(y)
 
     return self
 
@@ -86,8 +92,9 @@ class NaiveBayes:
       if y_hat_i == y_i]) / len(y)
 
   def get_cls_prob(self, row, label):
-    return reduce(mul, [self.probabilities[i][(val, label)]
-      for i, val in enumerate(row)], 1
+    return reduce(mul,
+      [self.probabilities[i][(val, label)] + \
+      self.label_cls_prob[label] for i, val in enumerate(row)], 1
     )
 
 
