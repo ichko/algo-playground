@@ -1,5 +1,6 @@
 import csv
-from collections import defaultdict
+from functools import reduce
+from operator import mul
 
 
 def read_file(file_name):
@@ -39,17 +40,29 @@ class NaiveBayes:
     data = [x + [y] for x, y in zip(X, y)]
     self.label_classes = get_cls_set(data, -1)
     for col in range(len(data[0])):
-      self.probabilities.append(
-        get_probability(data, col, -1)
-      )
+      self.probabilities.append(get_probability(data, col, -1))
 
     return self
 
   def predict(self, X):
-    pass
+    predictions = []
+    for row in X:
+      predictions.append(max(
+        self.get_cls_prob(row, label_cls), label_cls
+          for label_cls in self.label_classes,
+        key=lambda k: k[1]
+      ))
+
+    return predictions
 
   def score(self, X, y):
     pass
+
+  def get_cls_prob(self, row, label):
+    return reduce(
+      mul, [self.probabilities[(row, label)]
+            for feature in features], 1
+    )
 
 
 if __name__ == '__main__':
