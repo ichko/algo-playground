@@ -31,7 +31,7 @@ def get_probability(data, col_a, col_b):
     for cls_b in get_cls_set(data, col_b):
       frequency[(cls_a, cls_b)] = get_frequency(
         data, [(col_a, cls_a), (col_b, cls_b)]
-      ) / get_frequency(data, [(col_a, cls_a)])
+      ) / get_frequency(data, [(col_b, cls_b)])
 
   return frequency
 
@@ -93,7 +93,7 @@ class NaiveBayes:
 
   def get_cls_prob(self, row, label):
     return reduce(mul,
-      [self.probabilities[i][(val, label)] + \
+      [self.probabilities[i][(val, label)] * \
       self.label_cls_prob[label] for i, val in enumerate(row)], 1
     )
 
