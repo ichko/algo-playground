@@ -66,16 +66,16 @@ def main():
     data = read_2d_data(args.input_file)
     k = args.k
 
-    # Apply k-means to our data
+    # Apply k-means to our data.
     cluster_centers, assigned_centers = k_means(data, k)
 
-    # Print some info about the clustering
+    # Print some info about the clustering.
     print('Cluster centers:', cluster_centers)
     print('Data has length:', len(data))
     print('Assigned cluster centers list has length:', len(assigned_centers))
     print('Sample of assigned centers:', assigned_centers[:5])
 
-    # Display the clusters
+    # Display the clusters.
     plt.scatter(data[:, 0], data[:, 1],
                 c=[(float(i) / 10) for i in assigned_centers])
     plt.show()
