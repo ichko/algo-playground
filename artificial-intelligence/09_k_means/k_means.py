@@ -1,8 +1,10 @@
-"""Calculating clusters in 2d data with k means."""
+#!/usr/bin/env python3
 
+"""CLI Tool for calculating clusters of 2d data."""
+
+import argparse
 import csv
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 
 
@@ -44,8 +46,25 @@ def k_means(data, k):
 
 def main():
     """Main function."""
-    data = read_2d_data('data/normal.txt')
-    k = 4
+    parser = argparse.ArgumentParser(
+        description='Cluster 2d data from csv file.'
+    )
+
+    parser.add_argument(
+        '--input_file', type=str, nargs='?',
+        help='The name of the output file - ex.: data/normal.txt.',
+        default='data/normal.txt'
+    )
+    parser.add_argument(
+        '--k', type=int, nargs='?',
+        help='The number of desired clusters.',
+        default=4
+    )
+
+    args = parser.parse_args()
+
+    data = read_2d_data(args.input_file)
+    k = args.k
 
     # Apply k-means to our data
     cluster_centers, assigned_centers = k_means(data, k)
