@@ -32,9 +32,9 @@ def get_medians(data, k, classes):
 
 def k_means(data, k):
     """Implementation of k-means."""
-    idx = np.random.randint(len(data), size=k)
+    rand_indexes = np.random.randint(len(data), size=k)
     old_centers = []
-    centers = data[idx]
+    centers = data[rand_indexes]
 
     while not np.array_equal(old_centers, centers):
         classes = get_classes(data, centers)
