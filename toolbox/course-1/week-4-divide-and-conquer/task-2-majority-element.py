@@ -1,6 +1,7 @@
 # python3
 
 
+# TODO: Not working
 def majority_divide_and_conquer(array):
     def helper(left, right):
         if right - left == 1:
