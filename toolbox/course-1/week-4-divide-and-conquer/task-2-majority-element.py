@@ -35,4 +35,4 @@ def majority_sort(array):
 if __name__ == '__main__':
     _ = input()
     array = list(map(int, input().split()))
-    print(majority_divide_and_conquer(array))
+    print(majority_sort(array))
