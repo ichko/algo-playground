@@ -13,10 +13,9 @@ def binary_search(sorted_array, query):
             right = mid
 
 
-# TODO: finish implementation (off by smth errors)
 def count_number_of_segments(l_segments, r_segments, point):
-    lt_left = binary_search(l_segments, point)
-    gt_right = len(r_segments) - binary_search(r_segments, point)
+    lt_left = len(r_segments) - binary_search(l_segments, point)
+    gt_right = binary_search(r_segments, point)
 
     return len(l_segments) - lt_left - gt_right
 
@@ -27,8 +26,8 @@ if __name__ == '__main__':
     r_segments = []
     for _ in range(segment_cnt):
         l, r = list(map(int, input().split()))
-        l_segments.append(l)
-        r_segments.append(r)
+        l_segments.append(l - 0.5)
+        r_segments.append(r + 0.5)
     points = map(int, input().split())
 
     l_segments.sort()
