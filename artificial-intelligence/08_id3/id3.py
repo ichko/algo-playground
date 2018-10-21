@@ -16,10 +16,10 @@ def info_gain(X, y, attrib_id):
         cls_y_vals[X[id][attrib_id]].append(y[id])
 
     weighted_entropies = [
-        len(y_vals) * entropy(y_vals) / len(X) for _, y_vals in cls_y_vals.items()
+        len(y_vals) / len(X) * entropy(y_vals) for _, y_vals in cls_y_vals.items()
     ]
 
-    return entropy(y) - sum(weighted_entropies) / len(X)
+    return entropy(y) - sum(weighted_entropies)
 
 
 def attr_filter(X, y, attr_id, attr_val):
@@ -39,7 +39,6 @@ class Rule:
 
         if self.current_entropy == 0:
             self.predict_cls = max(Counter(y).items(), key=lambda x: [1])[0]
-            print("####", self.predict_cls)
             return
 
         gains = {
@@ -50,7 +49,9 @@ class Rule:
 
         max_gain_attrib_vals = set(map(lambda x: x[max_gain_attrib_id], X))
 
-        print("###### SPLIT BY", max_gain_attrib_vals, X)
+        print("Entropy", self.current_entropy)
+        print("Atrib gains", gains)
+        print("Split by", max_gain_attrib_id, max_gain_attrib_vals)
 
         self.max_gain_attrib_id = max_gain_attrib_id
         self.splitter = {}
