@@ -4,8 +4,8 @@ from collections import defaultdict
 
 
 def counting_sort(arr, key=lambda x: x):
-    if len(arr) == 0:
-        return []
+    if len(arr) <= 1:
+        return arr
 
     max_item_key = max(map(key, arr))
     counter = defaultdict(lambda: [])
@@ -20,20 +20,35 @@ def counting_sort(arr, key=lambda x: x):
     return output
 
 
-def radix_sort(arr):
-    return arr
+def radix_sort(arr, key=lambda x: x):
+    if len(arr) <= 1:
+        return arr
+
+    base = len(arr)
+    max_item_key = max(map(key, arr))
+    output = [(key(x), x) for x in arr]
+
+    while max_item_key > 0:
+        output = counting_sort(output, lambda x: x[0] % base)
+        output = [(x[0] // base, x[1]) for x in output]
+        max_item_key //= base
+
+    return [x[1] for x in output]
 
 
 class TestSorting(unittest.TestCase):
     def test_counting_sort(self):
         self.assert_testig_fnction(counting_sort)
 
+    def test_radix_sort(self):
+        self.assert_testig_fnction(radix_sort)
+
     def assert_testig_fnction(self, sorting_function):
-        test_cases = 100
+        test_cases = 1000
 
         for i in range(test_cases):
             input_size = randint(0, 20)
-            digits_size = 100
+            digits_size = 1000
             input_arr = [randint(0, digits_size) for _ in range(input_size)]
 
             actual_arr = sorting_function(input_arr)
