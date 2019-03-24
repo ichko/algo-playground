@@ -1,7 +1,0 @@
-{
-    "python.linting.pylintEnabled": false,
-    "python.pythonPath": "C:/Users/i4ko9/AppData/Local/Programs/Python/Python35-32/python.exe",
-    "files.exclude": {
-        "*/__pycache__": true
-    }
-}
