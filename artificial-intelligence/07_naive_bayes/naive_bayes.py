@@ -40,8 +40,10 @@ def k_fold_cross_val(model, data, k):
     scores = []
     shuffle(data)
     frame_size = ceil(len(data) / k)
-    frames = [data[i * frame_size:(i + 1) * frame_size]
-              for i in range(k)]
+    frames = [
+        data[i * frame_size:(i + 1) * frame_size]
+        for i in range(k)
+    ]
 
     for i in range(k):
         X_test, y_test = xy_split(frames[i])
@@ -101,15 +103,46 @@ class NaiveBayes:
 
 
 if __name__ == '__main__':
-    data = read_file('voting.data')
+    # data = read_file('voting.data')
+
+    # model = NaiveBayes()
+    # cross_val_scores = k_fold_cross_val(model, data, k=10)
+    # cross_val_scores = [round(num, 2) for num in cross_val_scores]
+
+    # print('cross validation:\n  ', cross_val_scores)
+    # print('mean score:\n  ', round(mean(cross_val_scores), 5))
+
+    # print('========================')
 
     model = NaiveBayes()
-    cross_val_scores = k_fold_cross_val(model, data, k=10)
-    cross_val_scores = [round(num, 2) for num in cross_val_scores]
 
-    print('cross validation:\n  ', cross_val_scores)
-    print('mean score:\n  ', round(mean(cross_val_scores), 5))
+    X = [
+        [1, 0, 1, 1, 1, 0, 1, 1],
+        [0, 0, 0, 1, 0, 0, 1, 1],
+        [1, 0, 0, 1, 1, 0, 1, 0],
+        [0, 1, 0, 0, 1, 1, 0, 1],
+        [0, 0, 0, 1, 1, 0, 1, 1],
+        [0, 0, 0, 1, 1, 0, 0, 1],
 
-    print('========================')
+        [1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0],
+        [1, 1, 0, 1, 0, 0, 0, 0],
+        [1, 1, 0, 1, 0, 0, 0, 1],
+        [1, 1, 0, 1, 1, 0, 0, 0],
+        [0, 0, 0, 1, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 0, 1, 0],
+    ]
+    # X = [['y' if e else 'n' for e in row] for row in X]
+
+    Y = ['politics' if e else 'sports' for e in [
+        1, 1, 1, 1, 1, 1,
+        0, 0, 0, 0, 0, 0, 0
+    ]]
+
+    data = [[y] + x for x, y in zip(X, Y)]
 
     nb = NaiveBayes()
+    nb.fit(X, Y)
+    y_p = nb.get_cls_prob([1, 0, 0, 1, 1, 1, 1, 0], 'politics')
+
+    print('Result: %f' % y_p)
