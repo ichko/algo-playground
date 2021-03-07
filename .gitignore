@@ -281,3 +281,5 @@ __pycache__/
 # !tools/packages.config
 
 *.vcx*
+
+*.inp
