@@ -1,11 +1,12 @@
 #!/bin/python3
-
 """
 Problem - <https://www.hackerrank.com/challenges/quadrant-queries/problem>
 
 Segment Trees - <https://cp-algorithms.com/data_structures/segment_tree.html>
 
 cat quadrant-queries.inp | py quadrant-queries.py
+
+This solution will only get you 83 points with the Pypy3 interpreter!
 """
 
 from array import array
@@ -152,15 +153,11 @@ def recur_update(seg_tree, lazy_tree, ul, ur, l, r, index, flip):
     mid >>= 1
     index <<= 1
 
-    l_quads = recur_update(
-        seg_tree, lazy_tree,
-        ul, ur, l, mid, index + 1, flip
-    )
+    l_quads = recur_update(seg_tree, lazy_tree, ul, ur, l, mid, index + 1,
+                           flip)
 
-    r_quads = recur_update(
-        seg_tree, lazy_tree,
-        ul, ur, mid + 1, r, index + 2, flip
-    )
+    r_quads = recur_update(seg_tree, lazy_tree, ul, ur, mid + 1, r, index + 2,
+                           flip)
 
     combine_quads(node, l_quads, r_quads)
     return node
@@ -188,14 +185,8 @@ def recur_query(result, seg_tree, lazy_tree, ul, ur, l, r, index):
     mid >>= 1
     index <<= 1
 
-    recur_query(
-        result, seg_tree, lazy_tree,
-        ul, ur, l, mid, index + 1
-    )
-    recur_query(
-        result, seg_tree, lazy_tree,
-        ul, ur, mid + 1, r, index + 2
-    )
+    recur_query(result, seg_tree, lazy_tree, ul, ur, l, mid, index + 1)
+    recur_query(result, seg_tree, lazy_tree, ul, ur, mid + 1, r, index + 2)
 
 
 def recur_build(points, seg_tree, l, r, index):
@@ -236,33 +227,20 @@ def quadrants(points, queries):
 
     recur_build(points, seg_tree, l=0, r=last_idx, index=0)
 
-    for q in queries:
-        c, l, r = q.split(' ')
-        l = int(l) - 1
-        r = int(r) - 1
-
+    for c, l, r in queries:
         if c == 'C':
             result = [0, 0, 0, 0]
 
-            recur_query(
-                result, seg_tree, lazy_tree,
-                l, r, 0, last_idx, 0
-            )
+            recur_query(result, seg_tree, lazy_tree, l, r, 0, last_idx, 0)
 
             out = f'{result[0]} {result[1]} {result[2]} {result[3]}'
             # file_str.write(out)
             print(out, file=file_str)
         else:
             if c == 'X':
-                recur_update(
-                    seg_tree, lazy_tree,
-                    l, r, 0, last_idx, 0, flip_y
-                )
+                recur_update(seg_tree, lazy_tree, l, r, 0, last_idx, 0, flip_y)
             else:
-                recur_update(
-                    seg_tree, lazy_tree,
-                    l, r, 0, last_idx, 0, flip_x
-                )
+                recur_update(seg_tree, lazy_tree, l, r, 0, last_idx, 0, flip_x)
 
         # print(tree.seg_tree)
         # print(tree.lazy_tree)
@@ -283,7 +261,10 @@ if __name__ == '__main__':
     queries = []
     for _ in range(q):
         queries_item = input()
-        queries.append(queries_item)
+        c, l, r = queries_item.split(' ')
+        l = int(l) - 1
+        r = int(r) - 1
+        queries.append((c, l, r))
 
     tic = time.perf_counter()
 
