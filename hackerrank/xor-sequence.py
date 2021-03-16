@@ -92,10 +92,10 @@ if __name__ == '__main__':
 
         r = int(lr[1])
 
-        # a_l = A_n(l)
-        # a_r = A_n(r)
-        # print('a_l', a_l)
-        # print('a_r', a_r)
+        a_l = A_n(l)
+        a_r = A_n(r)
+        print('a_l', a_l)
+        print('a_r', a_r)
 
         result = xor_sequence_2(l, r)
 
