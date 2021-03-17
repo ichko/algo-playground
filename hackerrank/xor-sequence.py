@@ -14,6 +14,25 @@ Sample Output 0:
     9
     15
 """
+"""
+11110 11110 30  - Числото
+11100 00010 2   - две
+11010 11000 24  - числото = числото - 6
+11000 00000 0   - нула
+
+10110 10110 22  - числото = числото - 2
+10100 00010 2   - две
+10010 10000 16  - числото = числото - 6
+10000 00000 0   - нула
+
+01110 01110 14  - числото = числото - 2
+01100 00010 2   - две
+01010 01000 8   - числото = числото - 6
+01000 00000 0   - нула
+
+00110 00110 6   - числото = числото - 2
+00100 00010 2   - две (отговор)
+"""
 
 import math
 import os
@@ -80,10 +99,35 @@ def xor_sequence_2(l, r):
     return result
 
 
+def xor_sequence_3(l, r):
+    l_bits = get_bit_vector_ones_counts(l + 1, max_bit=MAX_BITS)
+    r_bits = get_bit_vector_ones_counts(r, max_bit=MAX_BITS)
+
+    result = 0
+    for i, (l, r) in enumerate(zip(l_bits, r_bits)):
+        l //= 2
+        r //= 2
+        if (r - l) % 2 != 0:
+            result += 2**i
+
+    return result
+
+
 if __name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
     q = int(input())
+
+    l, r = 3, 30
+    a_l = format(A_n(l), '04b')
+    a_r = format(A_n(r), '04b')
+
+    s = 0
+    for j in range(r, l - 1, -2):
+        s ^= j
+        jf = format(j, '05b')
+        sf = format(s, '05b')
+        print(jf, sf, s)
 
     for q_itr in range(q):
         lr = input().split()
@@ -92,12 +136,7 @@ if __name__ == '__main__':
 
         r = int(lr[1])
 
-        a_l = A_n(l)
-        a_r = A_n(r)
-        print('a_l', a_l)
-        print('a_r', a_r)
-
-        result = xor_sequence_2(l, r)
+        result = xor_sequence_3(l, r)
 
         fptr.write(str(result) + '\n')
 
