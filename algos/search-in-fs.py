@@ -1,8 +1,100 @@
 import os
 import time
+from collections import defaultdict
+
 from tqdm import tqdm
 
-from graphviz import Digraph
+
+class Huffman:
+    class CompositeNode:
+        def __init__(self, left, right):
+            self.frequency = left.frequency + right.frequency
+            self.left = left
+            self.right = right
+
+    class LeafNode:
+        def __init__(self, letter, frequency):
+            self.letter = letter
+            self.frequency = frequency
+
+    def __init__(self):
+        self.words = []
+
+    def add_words(self, words):
+        self.words.extend(words)
+
+    def calc_letter_freq(self):
+        self.frequencies = defaultdict(lambda: 0)
+
+        for word in self.words:
+            for c in word:
+                self.frequencies[c] += 1
+
+    def calc_bigram_freq(self):
+        self.frequencies = defaultdict(lambda: 0)
+
+        for word in self.words:
+            for a, b in zip(word, word[1:]):
+                self.frequencies[(a, b)] += 1
+
+    def build_tree(self):
+        import heapq
+
+        self.calc_letter_freq()
+        pq = []
+        for letter, freq in self.frequencies.items():
+            node = Huffman.LeafNode(letter, freq)
+            heapq.heappush(pq, (freq, id(node), node))
+
+        while len(pq) > 1:
+            left_freq, _, left_node = heapq.heappop(pq)
+            right_freq, _, right_node = heapq.heappop(pq)
+            node = Huffman.CompositeNode(left_node, right_node)
+            heapq.heappush(pq, (left_freq + right_freq, id(node), node))
+
+        _, _, self.tree = heapq.heappop(pq)
+        return self.tree
+
+    @staticmethod
+    def example_tree():
+        huf = Huffman()
+        huf.add_words(['AAABAACAADAA', 'BBAACCAADD'])
+        huf.build_tree()
+        return huf
+
+    def to_graph(self):
+        from graphviz import Digraph
+
+        g = Digraph('G', filename='process.gv', format='png')
+
+        g.attr(compound='true')
+        g.attr(overlap='false')
+        g.attr(rankdir='LR', size='250,250')
+
+        def recur(parent_path, node):
+            if isinstance(node, Huffman.LeafNode):
+                g.attr('node', shape='doublecircle')
+                letter = node.letter
+                if type(letter) != str:
+                    letter = ''.join(list(letter))
+
+                g.node(parent_path, letter)
+                return
+            else:
+                g.attr('node', shape='circle')
+                g.node(parent_path, str(node.frequency))
+
+            l_path = f'{parent_path}l'
+            r_path = f'{parent_path}r'
+
+            recur(l_path, node.left)
+            recur(r_path, node.right)
+
+            g.edge(parent_path, l_path, label='0')
+            g.edge(parent_path, r_path, label='1')
+
+        recur('#', self.tree)
+        return g
 
 
 class Trie:
@@ -34,6 +126,8 @@ class Trie:
         recur(self.root, 0)
 
     def to_graph(self):
+        from graphviz import Digraph
+
         g = Digraph('G', filename='process.gv', format='png')
 
         g.attr(compound='true')
@@ -80,12 +174,13 @@ class Trie:
 
 def build_fs_tree(bar):
     def filter_name(name):
-        return ''.join(list(filter(lambda x: x.isalnum(), name)))
+        name = name.lower()
+        return ''.join(list(filter(lambda x: x.isalpha(), name)))
 
     all_files = []
 
     def parse_file(parent_path, parent_name, depth=0):
-        if depth > 2:
+        if depth > 10:
             return
 
         bar.update(1)
@@ -120,12 +215,22 @@ def build_fs_tree(bar):
 
 
 if __name__ == '__main__':
+    # huf = Huffman.example_tree()
+    # g = huf.to_graph()
+    # g.view()
+
     bar = tqdm(total=4301964)
     tic = time.perf_counter()
 
     root, all_files = build_fs_tree(bar)
-    fs_trie = Trie.from_words(all_files)
-    fs_trie.to_graph().view()
+
+    huf = Huffman()
+    huf.add_words(all_files)
+    huf.build_tree()
+    huf.to_graph().view()
+
+    # fs_trie = Trie.from_words(all_files)
+    # fs_trie.to_graph().view()
 
     toc = time.perf_counter()
 
