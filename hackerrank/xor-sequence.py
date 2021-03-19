@@ -118,16 +118,22 @@ if __name__ == '__main__':
 
     q = int(input())
 
-    l, r = 3, 30
+    l, r = 2, 31
     a_l = format(A_n(l), '04b')
     a_r = format(A_n(r), '04b')
 
     s = 0
-    for j in range(r, l - 1, -2):
+    for j in range(r, l, -2):
         s ^= j
         jf = format(j, '05b')
         sf = format(s, '05b')
-        print(jf, sf, s)
+        print(j, jf, sf, s)
+
+    if (l - r + 1) % 2 != 0:
+        al = A_n(l)
+        s ^= al
+
+    print(j, jf, sf, s)
 
     for q_itr in range(q):
         lr = input().split()
